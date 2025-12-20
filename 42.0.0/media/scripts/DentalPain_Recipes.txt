@@ -1,0 +1,36 @@
+module DentalPain
+{
+    craftRecipe Craft Homemade Toothbrush
+    {
+        inputs
+        {
+            item 1 [Base.Plank] mode:keep,
+            item 1 [Base.Thread],
+            item 1 [Base.KitchenKnife] mode:keep,
+        }
+        outputs
+        {
+            item 1 DentalPain.HomemadeToothbrush,
+        }
+        time = 40,
+        category = Medical,
+    }
+
+    craftRecipe Craft Homemade Toothpaste
+    {
+        inputs
+        {
+            item 1 [Base.Charcoal],
+            item 1 [Base.Plantain],
+            item 1 [Base.WaterBottle],
+        }
+        outputs
+        {
+            item 1 DentalPain.HomemadeToothpaste,
+            item 1 Base.WaterBottle,
+        }
+        time = 60,
+        category = Medical,
+    }
+
+}

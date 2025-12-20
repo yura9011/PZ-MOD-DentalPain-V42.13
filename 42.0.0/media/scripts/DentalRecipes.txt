@@ -1,0 +1,17 @@
+module Base
+{
+    craftRecipe BrushTeeth
+    {
+        time = 100,
+        category = Medical,
+        
+        inputs
+        {
+            item 1 [Base.Toothbrush] mode:keep,
+            item 1 [Base.Toothpaste],
+        }
+        outputs
+        {
+        }
+    }
+}

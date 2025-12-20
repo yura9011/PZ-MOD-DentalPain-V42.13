@@ -1,0 +1,79 @@
+IG_UI_ES = {
+    -- Categories
+    IGUI_ItemCat_Medical = "Médico",
+
+    -- SimpleStatus Bar Title
+    IGUI_SS_BARTITLE_MOD_DENTALHEALTH = "Salud Dental",
+    IGUI_SS_BARTITLE_mod_dentalhealth = "Salud Dental",
+
+    -- Tooltips
+    Tooltip_DentalFloss = "Usar hilo dental previene la caries severa.",
+    Tooltip_Mouthwash = "Una manera rápida de mantener la higiene.",
+    Tooltip_DentalAnesthetic = "Adormece los nervios de la boca. Usar antes de extracciones.",
+    Tooltip_HomemadeToothpaste = "Una mezcla áspera de carbón y hierbas. Sabe horrible.",
+    Tooltip_HomemadeToothbrush = "Mejor que nada, pero apenas.",
+
+    -- Context Menu
+    ContextMenu_BrushTeeth = "Cepillarse los Dientes",
+    ContextMenu_BrushTeethHomemade = "Cepillarse (Casero)",
+    ContextMenu_DentalFloss = "Usar Hilo Dental",
+    ContextMenu_Mouthwash = "Hacer Gárgaras",
+    ContextMenu_ExtractPliers = "Extraer Diente (Alicates)",
+    ContextMenu_ExtractHammer = "Destrozar Diente (Martillo)",
+    ContextMenu_TakeAnesthetic = "Tomar Anestésico Dental",
+
+    -- Severe Pain (8 phrases - cynical/absurdist)
+    IGUI_DentalPain_Severe1 = "El apocalipsis no mató el dolor. Solo a los dentistas.",
+    IGUI_DentalPain_Severe2 = "Cada bocado es agonía. Debí usar hilo dental. Qué chiste cósmico.",
+    IGUI_DentalPain_Severe3 = "Los muertos no sienten nada. Empiezo a entender su punto de vista.",
+    IGUI_DentalPain_Severe4 = "Mi mandíbula late al ritmo de un blues que nadie quiere escuchar.",
+    IGUI_DentalPain_Severe5 = "Sobreviví zombies para morir de un dolor de muelas. Brillante.",
+    IGUI_DentalPain_Severe6 = "El universo tiene un sentido del humor retorcido. Y yo soy el chiste.",
+    IGUI_DentalPain_Severe7 = "Necesito un dentista. O un martillo. En este punto, cualquiera sirve.",
+    IGUI_DentalPain_Severe8 = "Esto confirma mi teoría: Dios existe y le encanta el slapstick.",
+
+    -- Mild Pain (6 phrases)
+    IGUI_DentalPain_Mild1 = "Mis dientes se pudren. Como todo lo demás. Como la sociedad.",
+    IGUI_DentalPain_Mild2 = "Un dolor sordo. Un recordatorio constante de mi estupidez previa.",
+    IGUI_DentalPain_Mild3 = "Puedo saborear la decadencia. Tiene notas de ironía.",
+    IGUI_DentalPain_Mild4 = "El aire frío me recuerda que debería haber sido dentista. Ironía.",
+    IGUI_DentalPain_Mild5 = "Mis encías protestan. Deberían formar un sindicato.",
+    IGUI_DentalPain_Mild6 = "Una molestia menor. Como la civilización antes de caer.",
+
+    -- Relief (5 phrases)
+    IGUI_DentalPain_Relief1 = "El dolor se fue. Por ahora. Como todo lo bueno, volverá arruinado.",
+    IGUI_DentalPain_Relief2 = "Paz temporal. Tan confiable como las promesas de un político.",
+    IGUI_DentalPain_Relief3 = "Al menos algo funciona. No me acostumbraré.",
+    IGUI_DentalPain_Relief4 = "Un momento de alivio. El universo recarga sus baterías para joderme.",
+    IGUI_DentalPain_Relief5 = "Clean teeth, dirty world. Prioridades.",
+
+    -- Numbed (4 phrases)
+    IGUI_DentalPain_Numbed1 = "Mi boca se siente ajena. Como mi vida antes del apocalipsis.",
+    IGUI_DentalPain_Numbed2 = "No siento nada. Finalmente algo en común con los zombies.",
+    IGUI_DentalPain_Numbed3 = "Adormecido. Debería estar así todo el tiempo. Emocionalmente también.",
+    IGUI_DentalPain_Numbed4 = "Mi cara es un extraño. Nos llevamos bien.",
+
+    -- Extraction Events
+    IGUI_DentalPain_ToothBroke = "Algo se rompió. Mi diente, mi dignidad, probablemente ambos.",
+    IGUI_DentalPain_ExtractSuccess = "Está fuera. Sangre, dolor, y una victoria pírrica.",
+    IGUI_DentalPain_ExtractFail = "Me resbalé. El universo aplaude mi incompetencia.",
+    IGUI_DentalPain_ExtractDesperate = "Lo destrocé. Solución primitiva para tiempos primitivos.",
+
+    -- Food Temperature Pain
+    IGUI_DentalPain_FoodPain1 = "¡HELADO! El frío atraviesa mis nervios como electricidad vengativa.",
+    IGUI_DentalPain_FoodPain2 = "¡Quema! Mi boca es un infierno. Karma, probablemente.",
+    IGUI_DentalPain_FoodPain3 = "La temperatura me recuerda que tengo nervios. Todos gritando.",
+    IGUI_DentalPain_FoodPain4 = "Mi diente roto agradece esta nueva forma de tortura.",
+
+    -- Moodle Tooltips
+    IGUI_Moodle_DentalPain = "Dolor Dental",
+    IGUI_Moodle_DentalPain_Discomfort = "Molestia dental leve.",
+    IGUI_Moodle_DentalPain_Toothache = "Dolor de muelas. Deberías hacer algo.",
+    IGUI_Moodle_DentalPain_Severe = "¡Dolor severo! Necesitas tratamiento.",
+    IGUI_Moodle_DentalPain_Agony = "¡AGONÍA! Extrae el diente o muere de dolor.",
+    IGUI_Moodle_DentalPain_Broken = "¡DIENTE ROTO! ¡Extráelo ahora!",
+
+    -- Dental Abscess
+    IGUI_DentalPain_Abscess1 = "Mi encía... algo está muy mal. Puedo sentir la infección expandiéndose.",
+    IGUI_DentalPain_Abscess2 = "Absceso dental. La naturaleza encontró otra forma creativa de matarme.",
+}

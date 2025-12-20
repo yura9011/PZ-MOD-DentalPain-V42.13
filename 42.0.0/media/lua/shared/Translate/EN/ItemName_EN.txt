@@ -1,0 +1,7 @@
+ItemName_EN = {
+    ItemName_DentalPain.DentalFloss = "Dental Floss",
+    ItemName_DentalPain.Mouthwash = "Mouthwash",
+    ItemName_DentalPain.DentalAnesthetic = "Dental Anesthetic",
+    ItemName_DentalPain.HomemadeToothpaste = "Homemade Toothpaste",
+    ItemName_DentalPain.HomemadeToothbrush = "Homemade Toothbrush",
+}

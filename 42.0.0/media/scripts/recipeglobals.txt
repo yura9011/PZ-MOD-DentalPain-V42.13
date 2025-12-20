@@ -1,0 +1,3 @@
+recipeglobals.global("Brush Teeth")
+recipeglobals.global("Use Dental Floss")
+recipeglobals.global("Use Mouthwash")

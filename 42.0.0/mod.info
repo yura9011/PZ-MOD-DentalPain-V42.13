@@ -1,0 +1,5 @@
+id=DentalPain
+name=Dental Pain
+poster=poster.png
+require=moodlesinlua
+description=Adds a realistic dental health system. Brush, floss, and maintain oral hygiene or suffer decay, toothaches, and eventual tooth loss. Features: Custom moodle, hot/cold food sensitivity, dental abscess from neglect, tooth extraction mechanics. Requires MoodlesInLua.

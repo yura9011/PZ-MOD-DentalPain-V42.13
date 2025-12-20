@@ -1,0 +1,22 @@
+module Base
+{
+    item Toothbrush
+    {
+        DisplayCategory = Medical,
+        ItemType = base:normal,
+        DisplayName = Toothbrush,
+        Icon = Toothbrush,
+        Weight = 0.05,
+    }
+
+    item Toothpaste
+    {
+        DisplayCategory = Medical,
+        ItemType = base:drainable,
+        UseDelta = 0.1,
+        UseWhileEquipped = false,
+        DisplayName = Toothpaste,
+        Icon = Toothpaste,
+        Weight = 0.1,
+    }
+}

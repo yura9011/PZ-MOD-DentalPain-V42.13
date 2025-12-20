@@ -1,0 +1,55 @@
+module DentalPain
+{
+    item DentalFloss
+    {
+        ItemType = base:normal,
+        DisplayName = DisplayName_DentalFloss,
+        DisplayCategory = Medical,
+        Weight = 0.01,
+        Tooltip = "Proper flossing prevents major decay.",
+        Icon = Thread,
+    }
+
+    item Mouthwash
+    {
+        ItemType = base:drainable,
+        DisplayName = DisplayName_Mouthwash,
+        DisplayCategory = Medical,
+        Weight = 0.2,
+        UseDelta = 0.1,
+        Tooltip = "A quick way to maintain hygiene.",
+        Icon = WaterBottle,
+    }
+
+    item DentalAnesthetic
+    {
+        ItemType = base:normal,
+        DisplayName = DisplayName_DentalAnesthetic,
+        DisplayCategory = Medical,
+        Weight = 0.05,
+        Tooltip = "Dulls the nerves in your mouth. Use before extractions.",
+        Icon = PillsPainkiller,
+    }
+
+    item HomemadeToothpaste
+    {
+        ItemType = base:drainable,
+        DisplayName = DisplayName_HomemadeToothpaste,
+        DisplayCategory = Medical,
+        Weight = 0.1,
+        UseDelta = 0.2,
+        Tooltip = "A gritty mix of charcoal and herbs. Tastes terrible.",
+        Icon = Toothpaste,
+    }
+
+    item HomemadeToothbrush
+    {
+        ItemType = base:normal,
+        DisplayName = DisplayName_HomemadeToothbrush,
+        DisplayCategory = Medical,
+        Weight = 0.05,
+        Tooltip = "Better than nothing but barely.",
+        Icon = Toothbrush,
+    }
+
+}
