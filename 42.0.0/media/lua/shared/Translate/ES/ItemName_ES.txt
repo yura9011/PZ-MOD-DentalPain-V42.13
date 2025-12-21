@@ -1,7 +1,0 @@
-ItemName_ES = {
-    ItemName_DentalPain.DentalFloss = "Hilo Dental",
-    ItemName_DentalPain.Mouthwash = "Enjuague Bucal",
-    ItemName_DentalPain.DentalAnesthetic = "Anestésico Dental",
-    ItemName_DentalPain.HomemadeToothpaste = "Pasta de Dientes Casera",
-    ItemName_DentalPain.HomemadeToothbrush = "Cepillo de Dientes Casero",
-}

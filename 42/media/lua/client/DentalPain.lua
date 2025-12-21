@@ -12,3 +12,5 @@ require "TimedActions/ISDentalAction"
 require "TimedActions/ISExtractionAction"
 
 DentalPain.debug("DentalPain Mod: Modular System Initialized.")
+
+

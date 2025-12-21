@@ -1,4 +1,4 @@
-IG_UI_ES = {
+IGUI_ES = {
     -- Categories
     IGUI_ItemCat_Medical = "Médico",
 
@@ -12,15 +12,6 @@ IG_UI_ES = {
     Tooltip_DentalAnesthetic = "Adormece los nervios de la boca. Usar antes de extracciones.",
     Tooltip_HomemadeToothpaste = "Una mezcla áspera de carbón y hierbas. Sabe horrible.",
     Tooltip_HomemadeToothbrush = "Mejor que nada, pero apenas.",
-
-    -- Context Menu
-    ContextMenu_BrushTeeth = "Cepillarse los Dientes",
-    ContextMenu_BrushTeethHomemade = "Cepillarse (Casero)",
-    ContextMenu_DentalFloss = "Usar Hilo Dental",
-    ContextMenu_Mouthwash = "Hacer Gárgaras",
-    ContextMenu_ExtractPliers = "Extraer Diente (Alicates)",
-    ContextMenu_ExtractHammer = "Destrozar Diente (Martillo)",
-    ContextMenu_TakeAnesthetic = "Tomar Anestésico Dental",
 
     -- Severe Pain (8 phrases - cynical/absurdist)
     IGUI_DentalPain_Severe1 = "El apocalipsis no mató el dolor. Solo a los dentistas.",

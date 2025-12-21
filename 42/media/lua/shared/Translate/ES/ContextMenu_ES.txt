@@ -1,0 +1,9 @@
+ContextMenu_ES = {
+    ContextMenu_BrushTeeth = "Cepillarse los Dientes",
+    ContextMenu_BrushTeethHomemade = "Cepillarse (Casero)",
+    ContextMenu_DentalFloss = "Usar Hilo Dental",
+    ContextMenu_Mouthwash = "Hacer Gárgaras",
+    ContextMenu_ExtractPliers = "Extraer Diente (Alicates)",
+    ContextMenu_ExtractHammer = "Destrozar Diente (Martillo)",
+    ContextMenu_TakeAnesthetic = "Tomar Anestésico Dental",
+}

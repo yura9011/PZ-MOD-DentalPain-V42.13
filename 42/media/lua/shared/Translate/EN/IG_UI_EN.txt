@@ -1,4 +1,4 @@
-IG_UI_EN = {
+IGUI_EN = {
     -- Categories
     IGUI_ItemCat_Medical = "Medical",
 
@@ -12,15 +12,6 @@ IG_UI_EN = {
     Tooltip_DentalAnesthetic = "Numbs the mouth nerves. Use before extractions.",
     Tooltip_HomemadeToothpaste = "A gritty mix of charcoal and herbs. Tastes awful.",
     Tooltip_HomemadeToothbrush = "Better than nothing, but barely.",
-
-    -- Context Menu
-    ContextMenu_BrushTeeth = "Brush Teeth",
-    ContextMenu_BrushTeethHomemade = "Brush Teeth (Homemade)",
-    ContextMenu_DentalFloss = "Use Dental Floss",
-    ContextMenu_Mouthwash = "Gargle Mouthwash",
-    ContextMenu_ExtractPliers = "Extract Tooth (Pliers)",
-    ContextMenu_ExtractHammer = "Smash Tooth Out (Hammer)",
-    ContextMenu_TakeAnesthetic = "Take Dental Anesthetic",
 
     -- Severe Pain (8 phrases - cynical/absurdist)
     IGUI_DentalPain_Severe1 = "The apocalypse didn't kill pain. Just the dentists.",

@@ -3,7 +3,7 @@ module DentalPain
     item DentalFloss
     {
         ItemType = base:normal,
-        DisplayName = DisplayName_DentalFloss,
+        DisplayName = "Dental Floss",
         DisplayCategory = Medical,
         Weight = 0.01,
         Tooltip = "Proper flossing prevents major decay.",
@@ -13,7 +13,7 @@ module DentalPain
     item Mouthwash
     {
         ItemType = base:drainable,
-        DisplayName = DisplayName_Mouthwash,
+        DisplayName = "Mouthwash",
         DisplayCategory = Medical,
         Weight = 0.2,
         UseDelta = 0.1,
@@ -24,7 +24,7 @@ module DentalPain
     item DentalAnesthetic
     {
         ItemType = base:normal,
-        DisplayName = DisplayName_DentalAnesthetic,
+        DisplayName = "Dental Anesthetic",
         DisplayCategory = Medical,
         Weight = 0.05,
         Tooltip = "Dulls the nerves in your mouth. Use before extractions.",
@@ -34,7 +34,7 @@ module DentalPain
     item HomemadeToothpaste
     {
         ItemType = base:drainable,
-        DisplayName = DisplayName_HomemadeToothpaste,
+        DisplayName = "Homemade Toothpaste",
         DisplayCategory = Medical,
         Weight = 0.1,
         UseDelta = 0.2,
@@ -45,7 +45,7 @@ module DentalPain
     item HomemadeToothbrush
     {
         ItemType = base:normal,
-        DisplayName = DisplayName_HomemadeToothbrush,
+        DisplayName = "Homemade Toothbrush",
         DisplayCategory = Medical,
         Weight = 0.05,
         Tooltip = "Better than nothing but barely.",

@@ -103,21 +103,21 @@ function DP.Medical.onFillInventoryObjectContextMenu(playerNum, context, items)
     -- Extraction Options
     if inv:contains("Base.Pliers") then
         local chance = DP.Medical.calculateChance(player, "pliers")
-        context:addOption(getText("IGUI_ContextMenu_ExtractPliers") .. " (" .. math.floor(chance) .. "%)", player, function()
+        context:addOption(getText("ContextMenu_ExtractPliers") .. " (" .. math.floor(chance) .. "%)", player, function()
             ISTimedActionQueue.add(ISExtractionAction:new(player, "pliers", 400))
         end)
     end
     
     if inv:contains("Base.Hammer") or inv:contains("Base.HammerStone") or inv:contains("Base.BallPeenHammer") then
         local chance = DP.Medical.calculateChance(player, "hammer")
-        context:addOption(getText("IGUI_ContextMenu_ExtractHammer") .. " (" .. math.floor(chance) .. "%)", player, function()
+        context:addOption(getText("ContextMenu_ExtractHammer") .. " (" .. math.floor(chance) .. "%)", player, function()
             ISTimedActionQueue.add(ISExtractionAction:new(player, "hammer", 600))
         end)
     end
 
     -- Anesthetic
     if inv:contains("DentalPain.DentalAnesthetic") and not DP.isNumbed(player) then
-        context:addOption(getText("IGUI_ContextMenu_TakeAnesthetic"), player, DP.Medical.takeAnesthetic)
+        context:addOption(getText("ContextMenu_TakeAnesthetic"), player, DP.Medical.takeAnesthetic)
     end
 end
 

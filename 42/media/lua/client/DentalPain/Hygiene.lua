@@ -51,28 +51,28 @@ function DP.Hygiene.onFillInventoryObjectContextMenu(playerNum, context, items)
 
     -- Toothbrush + Paste (Standard)
     if inv:contains("Base.Toothbrush") and inv:contains("Base.Toothpaste") then
-        context:addOption(getText("IGUI_ContextMenu_BrushTeeth") .. healthLabel, player, function()
+        context:addOption(getText("ContextMenu_BrushTeeth") .. healthLabel, player, function()
             ISTimedActionQueue.add(ISDentalAction:new(player, "brush", 200))
         end)
     end
 
     -- Toothbrush + Paste (Homemade)
     if inv:contains("DentalPain.HomemadeToothbrush") and inv:contains("DentalPain.HomemadeToothpaste") then
-        context:addOption(getText("IGUI_ContextMenu_BrushTeethHomemade") .. healthLabel, player, function()
+        context:addOption(getText("ContextMenu_BrushTeethHomemade") .. healthLabel, player, function()
             ISTimedActionQueue.add(ISDentalAction:new(player, "brushHomemade", 250))
         end)
     end
     
     -- Floss
     if inv:contains("DentalPain.DentalFloss") then
-        context:addOption(getText("IGUI_ContextMenu_DentalFloss"), player, function()
+        context:addOption(getText("ContextMenu_DentalFloss"), player, function()
             ISTimedActionQueue.add(ISDentalAction:new(player, "floss", 150))
         end)
     end
     
     -- Mouthwash
     if inv:contains("DentalPain.Mouthwash") then
-        context:addOption(getText("IGUI_ContextMenu_Mouthwash"), player, function()
+        context:addOption(getText("ContextMenu_Mouthwash"), player, function()
             ISTimedActionQueue.add(ISDentalAction:new(player, "gargle", 100))
         end)
     end
