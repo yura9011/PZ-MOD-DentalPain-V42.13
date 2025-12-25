@@ -1,4 +1,5 @@
 -- DentalPain UI - Visual Status Bar
+-- Uses deferred initialization to avoid breaking other mods
 
 -- Storage
 local dentalBars = {}

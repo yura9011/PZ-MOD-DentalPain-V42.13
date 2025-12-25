@@ -75,7 +75,16 @@ local function MyDentalPainRender(milInstance)
     local borderTexturePath = self:getBorderTexturePath(goodBadNeutralId, level)
     local borderTexture = self:getTexture(borderTexturePath)
     
-    local iconTexture = getTexture("media/ui/DentalPain.png") 
+    -- Choose icon based on condition
+    local iconPath = "media/ui/DentalPain.png" -- Default: normal pain
+    
+    if md.hasBrokenTooth then
+        iconPath = "media/ui/DentalPain_Alt.png" -- Broken tooth: caries icon
+    elseif md.hasDentalAbscess then
+        iconPath = "media/ui/DentalPain_Legacy.png" -- Infection: legacy icon
+    end
+    
+    local iconTexture = getTexture(iconPath)
     
     if borderTexture and iconTexture then
          UIManager.DrawTexture(borderTexture, x, y, moodleSize, moodleSize, self.options.moodleAlpha)
