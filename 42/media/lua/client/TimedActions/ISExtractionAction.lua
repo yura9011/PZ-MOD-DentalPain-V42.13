@@ -6,7 +6,12 @@ ISExtractionAction = ISBaseTimedAction:derive("ISExtractionAction")
 
 function ISExtractionAction:isValid()
     local md = self.character:getModData()
-    if not md.hasBrokenTooth then return false end
+    
+    -- Check for broken tooth: ToothManager (new) OR legacy flag (backwards compat)
+    local hasBrokenTooth = md.hasBrokenTooth or 
+        (DentalPain.ToothManager and DentalPain.ToothManager.getFirstBrokenTooth(self.character) ~= nil)
+    
+    if not hasBrokenTooth then return false end
     
     local inv = self.character:getInventory()
     if self.method == "pliers" then

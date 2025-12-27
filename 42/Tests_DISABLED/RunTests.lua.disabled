@@ -1,0 +1,82 @@
+-- DentalPain/Tests/RunTests.lua
+-- Standalone test runner for DentalPain property tests
+-- Can be run outside of Project Zomboid for CI/testing
+-- VERSION: LOCAL_DEV_20241226_0200
+
+-- Mock PZ globals if not in game
+if not ZombRand then
+    math.randomseed(os.time())
+    function ZombRand(max)
+        if max <= 0 then return 0 end
+        return math.random(0, max - 1)
+    end
+end
+
+-- Mock Perks if not in game
+if not Perks then
+    Perks = {}
+end
+if not Perks.DentalCare then
+    Perks.DentalCare = "DentalCare"
+end
+if not Perks.Doctor then
+    Perks.Doctor = "Doctor"
+end
+
+-- Mock getText if not in game
+if not getText then
+    function getText(key)
+        return key
+    end
+end
+
+-- Load modules
+require "DentalPain/Core"
+require "DentalPain/ToothManager"
+require "DentalPain/SkillManager"
+require "DentalPain/FormulaCalculator"
+require "DentalPain/ZombiePractice"
+require "DentalPain/Tests/ToothManagerTests"
+require "DentalPain/Tests/SkillManagerTests"
+require "DentalPain/Tests/ZombiePracticeTests"
+require "DentalPain/Tests/ToothMapUITests"
+
+-- Run tests
+print("")
+print("============================================")
+print("  DentalPain Property-Based Test Suite")
+print("============================================")
+print("")
+
+local allSuccess = true
+
+-- ToothManager tests
+local success1, results1 = DentalPain.Tests.ToothManager.runAll(100)
+if not success1 then allSuccess = false end
+
+print("")
+
+-- SkillManager tests
+local success2, results2 = DentalPain.Tests.SkillManager.runAll(100)
+if not success2 then allSuccess = false end
+
+print("")
+
+-- ZombiePractice tests
+local success3, results3 = DentalPain.Tests.ZombiePractice.runAll(100)
+if not success3 then allSuccess = false end
+
+print("")
+
+-- ToothMapUI tests
+local success4, results4 = DentalPain.Tests.ToothMapUI.runAll(100)
+if not success4 then allSuccess = false end
+
+print("")
+if allSuccess then
+    print("ALL TESTS PASSED")
+    os.exit(0)
+else
+    print("SOME TESTS FAILED")
+    os.exit(1)
+end

@@ -3,53 +3,62 @@ module DentalPain
     item DentalFloss
     {
         ItemType = base:normal,
-        DisplayName = "Dental Floss",
+        DisplayName = Dental Floss,
         DisplayCategory = Medical,
         Weight = 0.01,
-        Tooltip = "Proper flossing prevents major decay.",
+        Tooltip = Proper flossing prevents major decay.,
         Icon = Thread,
     }
 
     item Mouthwash
     {
         ItemType = base:drainable,
-        DisplayName = "Mouthwash",
+        DisplayName = Mouthwash,
         DisplayCategory = Medical,
         Weight = 0.2,
         UseDelta = 0.1,
-        Tooltip = "A quick way to maintain hygiene.",
+        Tooltip = A quick way to maintain hygiene.,
         Icon = WaterBottle,
     }
 
     item DentalAnesthetic
     {
         ItemType = base:normal,
-        DisplayName = "Dental Anesthetic",
+        DisplayName = Dental Anesthetic,
         DisplayCategory = Medical,
         Weight = 0.05,
-        Tooltip = "Dulls the nerves in your mouth. Use before extractions.",
+        Tooltip = Dulls the nerves in your mouth. Use before extractions.,
         Icon = PillsPainkiller,
     }
 
     item HomemadeToothpaste
     {
         ItemType = base:drainable,
-        DisplayName = "Homemade Toothpaste",
+        DisplayName = Homemade Toothpaste,
         DisplayCategory = Medical,
         Weight = 0.1,
         UseDelta = 0.2,
-        Tooltip = "A gritty mix of charcoal and herbs. Tastes terrible.",
+        Tooltip = A gritty mix of charcoal and herbs. Tastes terrible.,
         Icon = Toothpaste,
     }
 
     item HomemadeToothbrush
     {
         ItemType = base:normal,
-        DisplayName = "Homemade Toothbrush",
+        DisplayName = Homemade Toothbrush,
         DisplayCategory = Medical,
         Weight = 0.05,
-        Tooltip = "Better than nothing but barely.",
+        Tooltip = Better than nothing but barely.,
         Icon = Toothbrush,
     }
 
+    item ZombieTooth
+    {
+        ItemType = base:normal,
+        DisplayName = Zombie Tooth,
+        DisplayCategory = Medical,
+        Weight = 0.01,
+        Tooltip = A decayed tooth extracted from a zombie corpse.,
+        Icon = Teeth,
+    }
 }

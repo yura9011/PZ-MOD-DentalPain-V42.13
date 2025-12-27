@@ -6,4 +6,6 @@ ContextMenu_ES = {
     ContextMenu_ExtractPliers = "Extraer Diente (Alicates)",
     ContextMenu_ExtractHammer = "Destrozar Diente (Martillo)",
     ContextMenu_TakeAnesthetic = "Tomar Anestésico Dental",
+    ContextMenu_PracticeExtraction = "Practicar Extracción",
+    ContextMenu_TeethLeft = "dientes restantes",
 }

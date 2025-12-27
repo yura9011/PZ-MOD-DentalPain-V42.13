@@ -1,8 +1,11 @@
 -- DentalPain UI - Visual Status Bar
 -- Uses deferred initialization to avoid breaking other mods
 
+require "DentalPain/Core"
+
 -- Storage
 local dentalBars = {}
+local toothMapUIs = {}
 local DentalPainUI = nil
 
 -- Configuration (default values)
@@ -121,6 +124,45 @@ local function initUI()
                 self:drawText(text, textX, 3, 1, 1, 1, 1, UIFont.Small)
             end
         end
+        
+        -- Draw hint for right-click (small text at bottom when hovered)
+        if self.isMouseOver then
+            -- Get skill level
+            local skillLevel = 0
+            if DentalPain.SkillManager then
+                skillLevel = DentalPain.SkillManager.getLevel(self.player)
+            end
+            
+            local hint = "Dental Skill: Lv" .. skillLevel .. " | Right-click: Tooth Map"
+            local hintWidth = getTextManager():MeasureStringX(UIFont.Small, hint)
+            self:drawText(hint, (self.width - hintWidth) / 2, self.height + 2, 0.7, 0.7, 0.7, 0.8, UIFont.Small)
+        end
+    end
+    
+    function DentalPainUI:onMouseMove(dx, dy)
+        ISPanel.onMouseMove(self, dx, dy)
+        self.isMouseOver = true
+    end
+    
+    function DentalPainUI:onMouseMoveOutside(dx, dy)
+        ISPanel.onMouseMoveOutside(self, dx, dy)
+        self.isMouseOver = false
+    end
+    
+    -- Override onMouseDown to prevent 'Object true did not have __call' error
+    function DentalPainUI:onMouseDown(x, y)
+        if not self:getIsVisible() then
+            return
+        end
+        -- Note: Don't call self:isMouseOver() - it can return true directly
+        -- Just handle the drag logic
+        if self.moveWithMouse then
+            self.downX = x
+            self.downY = y
+            self.moving = true
+            self:bringToTop()
+        end
+        -- Don't return anything
     end
 
     function DentalPainUI:new(player, savedX, savedY)
@@ -135,6 +177,35 @@ local function initUI()
         o.moveWithMouse = true
         
         return o
+    end
+    
+    -- Handle right-click to show tooth map
+    function DentalPainUI:onRightMouseUp(x, y)
+        if self.player and not self.player:isDead() then
+            self:showToothMap()
+        end
+        return true
+    end
+    
+    -- Show the tooth map UI
+    function DentalPainUI:showToothMap()
+        local playerNum = self.player:getPlayerNum()
+        
+        -- Close existing tooth map if open
+        if toothMapUIs[playerNum] then
+            pcall(function()
+                toothMapUIs[playerNum]:removeFromUIManager()
+            end)
+            toothMapUIs[playerNum] = nil
+        end
+        
+        -- Create and show new tooth map
+        if DentalPain.UI and DentalPain.UI.ToothMapUI then
+            local toothMap = DentalPain.UI.ToothMapUI.show(self.player)
+            if toothMap then
+                toothMapUIs[playerNum] = toothMap
+            end
+        end
     end
     
     return true

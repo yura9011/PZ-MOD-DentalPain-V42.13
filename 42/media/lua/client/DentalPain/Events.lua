@@ -1,25 +1,61 @@
 -- DentalPain/Events.lua
 -- Central event registration and handling for DentalPain
+-- VERSION: LOCAL_DEV_20241226_INTEGRATION
+
+require "DentalPain/ToothManager"
+require "DentalPain/SkillManager"
+require "DentalPain/FormulaCalculator"
 
 local DP = DentalPain or {}
 
 -- 1. Initialization
+-- Now uses ToothManager for 32-tooth system (Requirement 1.1)
+-- Includes migration support for existing saves
 local function onCreatePlayer(playerNum, player)
     if not player then return end
     local modData = player:getModData()
+    
+    -- Initialize/migrate 32-tooth system via ToothManager
+    -- This handles both new games and legacy save migration
+    DP.ToothManager.ensureInitialized(player)
+    
+    -- Initialize legacy fields for backwards compatibility
     if modData.dentalHealth == nil then
         modData.dentalHealth = DP.Config.InitialDentalHealth
+    end
+    if modData.hasBrokenTooth == nil then
         modData.hasBrokenTooth = false
+    end
+    if modData.teethExtracted == nil then
         modData.teethExtracted = 0
+    end
+    if modData.anestheticTimer == nil then
         modData.anestheticTimer = 0
+    end
+    if modData.lastEatingState == nil then
         modData.lastEatingState = false
     end
+    
+    -- Sync legacy dentalHealth with ToothManager overall health
+    modData.dentalHealth = DP.ToothManager.getOverallHealth(player)
+    
+    -- Sync legacy teethExtracted count
+    modData.teethExtracted = 32 - DP.ToothManager.getRemainingCount(player)
+    
+    -- Sync legacy hasBrokenTooth flag
+    modData.hasBrokenTooth = DP.ToothManager.getFirstBrokenTooth(player) ~= nil
+    
+    DP.debug("Player initialized with 32-tooth system - Teeth: " .. DP.ToothManager.getRemainingCount(player) .. "/32, Health: " .. math.floor(modData.dentalHealth) .. "%")
 end
 
 -- 2. Hourly Decay & State Updates
+-- Now uses ToothManager for individual tooth damage distribution (Requirement 1.2)
 local function onEveryHour()
-    local player = getPlayer()
+    local player = getSpecificPlayer(0)
     if not player or player:isDead() then return end
+    
+    -- Ensure tooth system is initialized
+    DP.ToothManager.ensureInitialized(player)
     
     -- Anesthetic Timer
     local modData = player:getModData()
@@ -27,22 +63,33 @@ local function onEveryHour()
         modData.anestheticTimer = modData.anestheticTimer - 1
     end
     
-    -- Health Decay
-    local oldHealth = DP.getDentalHealth(player)
-    DP.setDentalHealth(player, oldHealth - DP.Config.DentalHealthDecline)
+    -- Check if player has any teeth left
+    if not DP.ToothManager.hasAnyTeeth(player) then
+        -- No teeth remaining - disable dental pain mechanics (Requirement 1.5)
+        DP.debug("No teeth remaining - dental mechanics disabled")
+        return
+    end
+    
+    -- Health Decay - Apply damage to individual teeth via ToothManager
+    -- Small hourly decay distributed to random tooth
+    local decayAmount = DP.Config.DentalHealthDecline * 4 -- Scale for individual tooth
+    DP.ToothManager.applyDamage(player, decayAmount)
+    
+    -- Update legacy dentalHealth to match overall tooth health
+    local overallHealth = DP.ToothManager.getOverallHealth(player)
+    modData.dentalHealth = overallHealth
     
     -- Reaction check (from Dialogue module)
     DP.Dialogue.checkAutoSpeech(player)
     
     -- Pain effects (Medical module)
-    if oldHealth < DP.Config.PainThreshold and not DP.isNumbed(player) then
+    if overallHealth < DP.Config.PainThreshold and not DP.isNumbed(player) then
         local head = player:getBodyDamage():getBodyPart(BodyPartType.Head)
         head:setAdditionalPain(DP.Config.SeverePainAmount)
     end
     
     -- Dental Abscess Tracking (forms after 24h of severe pain)
-    local health = DentalPain.getDentalHealth(player)
-    if health < 20 and not modData.hasDentalAbscess then
+    if overallHealth < 20 and not modData.hasDentalAbscess then
         modData.severePainHours = (modData.severePainHours or 0) + 1
         
         if modData.severePainHours >= 24 then
@@ -54,21 +101,30 @@ local function onEveryHour()
                 head:setAdditionalPain(head:getAdditionalPain() + 30)
             end
             DP.Dialogue.sayRandom(player, "Abscess")
-            DentalPain.debug("Dental abscess formed after 24h of severe pain")
+            DP.debug("Dental abscess formed after 24h of severe pain")
         end
-    elseif health >= 20 then
+    elseif overallHealth >= 20 then
         -- Reset counter if health improves
         modData.severePainHours = 0
     end
 end
 
 -- 3. Eating Detection (B42 Polling) + Temperature Pain
+-- Now uses ToothManager for damage distribution (Requirement 1.2)
 local function onEveryOneMinute()
-    local player = getPlayer()
+    local player = getSpecificPlayer(0)
     if not player or player:isDead() then return end
     
     local modData = player:getModData()
     if not modData then return end
+    
+    -- Ensure tooth system is initialized
+    DP.ToothManager.ensureInitialized(player)
+    
+    -- Check if player has any teeth left
+    if not DP.ToothManager.hasAnyTeeth(player) then
+        return -- No teeth, no dental damage from eating
+    end
     
     local queue = ISTimedActionQueue.getTimedActionQueue(player)
     if queue then
@@ -78,12 +134,20 @@ local function onEveryOneMinute()
             if currentAction and currentAction.item then
                 local item = currentAction.item
                 local damage = DP.FoodImpact[item:getFullType()] or 1.0
-                DP.setDentalHealth(player, DP.getDentalHealth(player) - damage)
+                
+                -- Apply damage to individual tooth via ToothManager
+                DP.ToothManager.applyDamage(player, damage)
+                
+                -- Update legacy dentalHealth to match overall tooth health
+                modData.dentalHealth = DP.ToothManager.getOverallHealth(player)
+                
+                -- Check for tooth break
                 DP.Medical.checkBreak(player)
                 
                 -- Hot/Cold Food Pain (if vulnerable teeth)
-                local dentalHealth = DentalPain.getDentalHealth(player)
-                local isVulnerable = modData.hasBrokenTooth or dentalHealth < 30
+                local overallHealth = DP.ToothManager.getOverallHealth(player)
+                local hasBrokenTooth = DP.ToothManager.getFirstBrokenTooth(player) ~= nil
+                local isVulnerable = hasBrokenTooth or overallHealth < 30
                 
                 if isVulnerable and item.IsFood and item:IsFood() then
                     local heat = item:getHeat() or 0.5
@@ -96,7 +160,7 @@ local function onEveryOneMinute()
                             head:setAdditionalPain(head:getAdditionalPain() + 40)
                         end
                         DP.Dialogue.sayRandom(player, "FoodPain")
-                        DentalPain.playPainSound(player)
+                        DP.playPainSound(player)
                     -- Hot food
                     elseif heat > 0.8 then
                         local head = player:getBodyDamage():getBodyPart(BodyPartType.Head)
@@ -125,177 +189,81 @@ local function onFillInventoryObjectContextMenu(playerNum, context, items)
         local subMenu = context:getNew(context)
         context:addSubMenu(option, subMenu)
         
-        -- Health Info
-        local currentHealth = DP.getDentalHealth(player)
-        subMenu:addOption("--- Health: " .. math.floor(currentHealth) .. "/100 ---", nil, nil)
+        -- Quick Status Display
+        local health = math.floor(DP.ToothManager.getOverallHealth(player))
+        local teeth = DP.ToothManager.getRemainingCount(player)
+        local level = DP.SkillManager.getLevel(player)
+        local xp = DP.SkillManager.getXP(player)
+        subMenu:addOption("--- Status: " .. teeth .. "/32 teeth, " .. health .. "% HP, Lv" .. level .. " (" .. xp .. " XP) ---", nil, nil)
         
-        -- Health Manipulation
-        subMenu:addOption("Set Health: 100 (Perfect)", player, function()
-            DP.setDentalHealth(player, 100)
-            player:Say("[DEBUG] Health set to 100")
-        end)
-        subMenu:addOption("Set Health: 50 (Mild Pain)", player, function()
-            DP.setDentalHealth(player, 50)
-            player:Say("[DEBUG] Health set to 50")
-        end)
-        subMenu:addOption("Set Health: 20 (Severe Pain)", player, function()
-            DP.setDentalHealth(player, 20)
-            player:Say("[DEBUG] Health set to 20")
-        end)
-        subMenu:addOption("Set Health: 5 (Critical)", player, function()
-            DP.setDentalHealth(player, 5)
-            player:Say("[DEBUG] Health set to 5")
+        -- 1. Show Tooth Map
+        subMenu:addOption("1. Show Tooth Map", player, function()
+            DentalPain.UI.ToothMapUI.show(player)
         end)
         
-        -- Dialogue Tests
-        subMenu:addOption("--- Dialogue Tests ---", nil, nil)
-        subMenu:addOption("Say: Severe Pain", player, function() 
-            DP.Dialogue.sayRandom(player, "Severe") 
-        end)
-        subMenu:addOption("Say: Mild Pain", player, function() 
-            DP.Dialogue.sayRandom(player, "Mild") 
-        end)
-        subMenu:addOption("Say: Relief", player, function() 
-            DP.Dialogue.sayRandom(player, "Relief") 
-        end)
-        subMenu:addOption("Say: Numbed", player, function() 
-            DP.Dialogue.sayRandom(player, "Numbed") 
-        end)
-        subMenu:addOption("Say: Tooth Broke", player, function() 
-            DP.Dialogue.sayRandom(player, "Extraction", "Broken") 
-        end)
-        subMenu:addOption("Say: Extract Success", player, function() 
-            DP.Dialogue.sayRandom(player, "Extraction", "Success") 
-        end)
-        subMenu:addOption("Say: Extract Fail", player, function() 
-            DP.Dialogue.sayRandom(player, "Extraction", "Fail") 
+        -- 2. Damage a tooth
+        subMenu:addOption("2. Damage Random Tooth (-20)", player, function()
+            local idx = DP.ToothManager.applyDamage(player, 20)
+            if idx then
+                local tooth = DP.ToothManager.getToothByIndex(player, idx)
+                player:Say("Damaged " .. tooth.name .. " -> " .. math.floor(tooth.health) .. "%")
+            end
         end)
         
-        -- Action Tests
-        subMenu:addOption("--- Action Tests ---", nil, nil)
-        subMenu:addOption("Simulate: Brush Teeth", player, function()
-            DP.Hygiene.brushTeeth(player, false)
-            player:Say("[DEBUG] Brushed!")
-        end)
-        subMenu:addOption("Simulate: Brush (Homemade)", player, function()
-            DP.Hygiene.brushTeeth(player, true)
-            player:Say("[DEBUG] Brushed (homemade)!")
-        end)
-        subMenu:addOption("Simulate: Floss", player, function()
-            DP.Hygiene.flossTeeth(player)
-            player:Say("[DEBUG] Flossed!")
-        end)
-        subMenu:addOption("Simulate: Mouthwash", player, function()
-            DP.Hygiene.gargle(player)
-            player:Say("[DEBUG] Gargled!")
-        end)
-        subMenu:addOption("Simulate: Take Anesthetic", player, function()
-            DP.Medical.takeAnesthetic(player)
-            player:Say("[DEBUG] Numbed for " .. DP.Config.AnestheticDuration .. " hours")
+        -- 3. Heal a tooth
+        subMenu:addOption("3. Heal Random Tooth (+20)", player, function()
+            local idx = DP.ToothManager.healRandomTooth(player, 20)
+            if idx then
+                local tooth = DP.ToothManager.getToothByIndex(player, idx)
+                player:Say("Healed " .. tooth.name .. " -> " .. math.floor(tooth.health) .. "%")
+            end
         end)
         
-        -- State Tests
-        subMenu:addOption("--- State Tests ---", nil, nil)
-        subMenu:addOption("Toggle: Broken Tooth", player, function()
-            modData.hasBrokenTooth = not modData.hasBrokenTooth
-            player:Say("[DEBUG] Broken Tooth: " .. tostring(modData.hasBrokenTooth))
-        end)
-        subMenu:addOption("Info: Teeth Extracted", player, function()
-            player:Say("[DEBUG] Teeth Extracted: " .. (modData.teethExtracted or 0) .. "/" .. DP.Config.TeethTotal)
-        end)
-        subMenu:addOption("Info: Anesthetic Timer", player, function()
-            player:Say("[DEBUG] Anesthetic Timer: " .. (modData.anestheticTimer or 0) .. " hours left")
+        -- 4. Set tooth broken
+        subMenu:addOption("4. Set Random Tooth BROKEN", player, function()
+            local tooth = DP.ToothManager.getRandomNonExtractedTooth(player)
+            if tooth then
+                DP.ToothManager.setToothState(player, tooth.index, DentalPain.ToothState.BROKEN)
+                player:Say(tooth.name .. " is now BROKEN")
+            end
         end)
         
-        -- Extraction Simulation
-        subMenu:addOption("--- Extraction Tests ---", nil, nil)
-        subMenu:addOption("Simulate: Pliers Extract", player, function()
-            modData.hasBrokenTooth = true -- Force broken tooth for test
+        -- 5. Extract tooth
+        subMenu:addOption("5. Simulate Pliers Extraction", player, function()
+            modData.hasBrokenTooth = true
             DP.Medical.performExtraction(player, "pliers")
-            player:Say("[DEBUG] Extraction done (pliers)")
-        end)
-        subMenu:addOption("Simulate: Hammer Extract", player, function()
-            modData.hasBrokenTooth = true -- Force broken tooth for test
-            DP.Medical.performExtraction(player, "hammer")
-            player:Say("[DEBUG] Extraction done (hammer)")
         end)
         
-        -- Tick Simulation
-        subMenu:addOption("--- Simulation ---", nil, nil)
-        subMenu:addOption("Force: Hourly Tick", player, function()
-            onEveryHour()
-            local h = DP.getDentalHealth(player)
-            player:Say("[DEBUG] Tick! Health: " .. math.floor(h))
-        end)
-        subMenu:addOption("Force: Check Tooth Break", player, function()
-            DP.Medical.checkBreak(player)
-            player:Say("[DEBUG] Break check done")
+        -- 6. Award XP
+        subMenu:addOption("6. Award 50 XP (Extraction)", player, function()
+            DP.SkillManager.awardXP(player, "SELF_EXTRACTION_SUCCESS")
+            local xp = DP.SkillManager.getXP(player)
+            local lv = DP.SkillManager.getLevel(player)
+            player:Say("Now: Lv" .. lv .. " (" .. xp .. " XP)")
         end)
         
-        -- NEW: Health System Integration Tests
-        subMenu:addOption("--- New Features Tests ---", nil, nil)
-        
-        -- Test Head Bleeding
-        subMenu:addOption("Test: Head Bleeding ON", player, function()
-            local head = player:getBodyDamage():getBodyPart(BodyPartType.Head)
-            if head then
-                head:setBleeding(true)
-                head:generateDeepWound()
-            end
-            player:Say("[DEBUG] Head bleeding enabled - check Health Panel!")
-        end)
-        subMenu:addOption("Test: Head Bleeding OFF", player, function()
-            local head = player:getBodyDamage():getBodyPart(BodyPartType.Head)
-            if head then
-                head:setBleeding(false)
-            end
-            player:Say("[DEBUG] Head bleeding disabled")
+        -- 7. Brush (heals tooth)
+        subMenu:addOption("7. Brush Teeth (heals)", player, function()
+            DP.Hygiene.brushTeeth(player, false)
+            player:Say("Brushed! Health: " .. math.floor(DP.ToothManager.getOverallHealth(player)) .. "%")
         end)
         
-        -- Test Food Pain
-        subMenu:addOption("Test: Cold Food Pain", player, function()
-            local head = player:getBodyDamage():getBodyPart(BodyPartType.Head)
-            if head then
-                head:setAdditionalPain(head:getAdditionalPain() + 40)
-            end
-            DP.Dialogue.sayRandom(player, "FoodPain")
-            DentalPain.playPainSound(player)
-            player:Say("[DEBUG] Cold food pain triggered!")
-        end)
-        subMenu:addOption("Test: Hot Food Pain", player, function()
-            local head = player:getBodyDamage():getBodyPart(BodyPartType.Head)
-            if head then
-                head:setAdditionalPain(head:getAdditionalPain() + 25)
-            end
-            DP.Dialogue.sayRandom(player, "FoodPain")
-            player:Say("[DEBUG] Hot food pain triggered!")
+        -- 8. Legacy Migration Test
+        subMenu:addOption("8. Test Legacy Migration", player, function()
+            modData.dentalTeeth = nil
+            modData.dentalHealth = 45
+            modData.teethExtracted = 3
+            DP.ToothManager.ensureInitialized(player)
+            local remaining = DP.ToothManager.getRemainingCount(player)
+            local health = DP.ToothManager.getOverallHealth(player)
+            player:Say("Migrated: " .. remaining .. " teeth, " .. math.floor(health) .. "% HP")
         end)
         
-        -- Test Dental Abscess
-        subMenu:addOption("Test: Force Abscess", player, function()
-            modData.hasDentalAbscess = true
-            modData.severePainHours = 24
-            local head = player:getBodyDamage():getBodyPart(BodyPartType.Head)
-            if head then
-                head:setInfectedWound(true)
-                head:setAdditionalPain(head:getAdditionalPain() + 30)
-            end
-            DP.Dialogue.sayRandom(player, "Abscess")
-            player:Say("[DEBUG] Abscess forced - check Health Panel for infection!")
-        end)
-        subMenu:addOption("Test: Clear Abscess", player, function()
-            modData.hasDentalAbscess = false
-            modData.severePainHours = 0
-            local head = player:getBodyDamage():getBodyPart(BodyPartType.Head)
-            if head then
-                head:setInfectedWound(false)
-            end
-            player:Say("[DEBUG] Abscess cleared")
-        end)
-        subMenu:addOption("Info: Abscess Status", player, function()
-            local hasAbscess = modData.hasDentalAbscess and "YES" or "NO"
-            local hours = modData.severePainHours or 0
-            player:Say("[DEBUG] Abscess: " .. hasAbscess .. " | Pain Hours: " .. hours .. "/24")
+        -- 9. Reset All
+        subMenu:addOption("9. RESET: Full 32 Teeth", player, function()
+            DP.ToothManager.initialize(player)
+            modData.dentalCareXP = 0
+            player:Say("Reset! 32 teeth, 100% HP, 0 XP")
         end)
     end
 

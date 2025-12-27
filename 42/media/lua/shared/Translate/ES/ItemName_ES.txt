@@ -4,4 +4,8 @@ ItemName_ES = {
     ["ItemName_DentalPain.DentalAnesthetic"] = "Anestésico Dental",
     ["ItemName_DentalPain.HomemadeToothpaste"] = "Pasta de Dientes Casera",
     ["ItemName_DentalPain.HomemadeToothbrush"] = "Cepillo de Dientes Casero",
+    ["ItemName_DentalPain.ZombieTooth"] = "Diente de Zombi",
+    ["ItemName_DentalPain.BookDentalCare1"] = "Cuidado Dental para Principiantes",
+    ["ItemName_DentalPain.BookDentalCare2"] = "Procedimientos Dentales Avanzados",
+    ["ItemName_DentalPain.BookDentalCare3"] = "Manual de Cirugía Oral",
 }

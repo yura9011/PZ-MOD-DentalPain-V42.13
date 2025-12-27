@@ -1,4 +1,8 @@
 IGUI_ES = {
+    -- Dental Care Perk
+    UI_perk_DentalCare = "Cuidado Dental",
+    UI_perk_DentalCare_desc = "Mejora la tasa de éxito de procedimientos dentales y desbloquea tratamientos avanzados.",
+
     -- Categories
     IGUI_ItemCat_Medical = "Médico",
 
@@ -67,4 +71,24 @@ IGUI_ES = {
     -- Dental Abscess
     IGUI_DentalPain_Abscess1 = "Mi encía... algo está muy mal. Puedo sentir la infección expandiéndose.",
     IGUI_DentalPain_Abscess2 = "Absceso dental. La naturaleza encontró otra forma creativa de matarme.",
+
+    -- Tooth Map UI
+    IGUI_ToothMap_Title = "Mapa Dental",
+    IGUI_ToothMap_UpperJaw = "Mandíbula Superior",
+    IGUI_ToothMap_LowerJaw = "Mandíbula Inferior",
+    IGUI_ToothMap_OverallHealth = "Salud General",
+    IGUI_ToothMap_TeethRemaining = "Dientes Restantes",
+    IGUI_ToothMap_Health = "Salud",
+    IGUI_ToothMap_State = "Estado",
+    IGUI_ToothMap_ShowMap = "Mostrar Mapa Dental",
+
+    -- Tooth States
+    IGUI_ToothState_Healthy = "Sano",
+    IGUI_ToothState_Cavity = "Caries",
+    IGUI_ToothState_Infected = "Infectado",
+    IGUI_ToothState_Broken = "Roto",
+    IGUI_ToothState_Extracted = "Extraído",
+
+    -- UI Hints
+    IGUI_ToothMap_RightClickHint = "Clic derecho para Mapa Dental",
 }

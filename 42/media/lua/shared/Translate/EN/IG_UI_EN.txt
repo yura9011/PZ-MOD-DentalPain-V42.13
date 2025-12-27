@@ -1,4 +1,8 @@
 IGUI_EN = {
+    -- Dental Care Perk
+    UI_perk_DentalCare = "Dental Care",
+    UI_perk_DentalCare_desc = "Improves success rate of dental procedures and unlocks advanced treatments.",
+
     -- Categories
     IGUI_ItemCat_Medical = "Medical",
 
@@ -67,4 +71,24 @@ IGUI_EN = {
     -- Dental Abscess
     IGUI_DentalPain_Abscess1 = "My gum... something is very wrong. I can feel the infection spreading.",
     IGUI_DentalPain_Abscess2 = "Dental abscess. Nature found another creative way to kill me.",
+
+    -- Tooth Map UI
+    IGUI_ToothMap_Title = "Tooth Map",
+    IGUI_ToothMap_UpperJaw = "Upper Jaw",
+    IGUI_ToothMap_LowerJaw = "Lower Jaw",
+    IGUI_ToothMap_OverallHealth = "Overall Health",
+    IGUI_ToothMap_TeethRemaining = "Teeth Remaining",
+    IGUI_ToothMap_Health = "Health",
+    IGUI_ToothMap_State = "State",
+    IGUI_ToothMap_ShowMap = "Show Tooth Map",
+
+    -- Tooth States
+    IGUI_ToothState_Healthy = "Healthy",
+    IGUI_ToothState_Cavity = "Cavity",
+    IGUI_ToothState_Infected = "Infected",
+    IGUI_ToothState_Broken = "Broken",
+    IGUI_ToothState_Extracted = "Extracted",
+
+    -- UI Hints
+    IGUI_ToothMap_RightClickHint = "Right-click for Tooth Map",
 }

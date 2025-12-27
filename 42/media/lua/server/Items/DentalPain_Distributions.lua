@@ -19,5 +19,40 @@ if ProceduralDistributions.list["MedicalClinic"] then
     table.insert(ProceduralDistributions.list["MedicalClinic"].items, 1);
     table.insert(ProceduralDistributions.list["MedicalClinic"].items, "DentalPain.Mouthwash");
     table.insert(ProceduralDistributions.list["MedicalClinic"].items, 1);
+    -- Dental skill books (low spawn chance) - Requirement 6.5
+    table.insert(ProceduralDistributions.list["MedicalClinic"].items, "DentalPain.BookDentalCare1");
+    table.insert(ProceduralDistributions.list["MedicalClinic"].items, 0.3);
+    table.insert(ProceduralDistributions.list["MedicalClinic"].items, "DentalPain.BookDentalCare2");
+    table.insert(ProceduralDistributions.list["MedicalClinic"].items, 0.2);
+    table.insert(ProceduralDistributions.list["MedicalClinic"].items, "DentalPain.BookDentalCare3");
+    table.insert(ProceduralDistributions.list["MedicalClinic"].items, 0.1);
+end
+
+-- Distribution: MedicalStorageOutfit (medical facility storage)
+if ProceduralDistributions.list["MedicalStorageOutfit"] then
+    table.insert(ProceduralDistributions.list["MedicalStorageOutfit"].items, "DentalPain.BookDentalCare1");
+    table.insert(ProceduralDistributions.list["MedicalStorageOutfit"].items, 0.2);
+    table.insert(ProceduralDistributions.list["MedicalStorageOutfit"].items, "DentalPain.BookDentalCare2");
+    table.insert(ProceduralDistributions.list["MedicalStorageOutfit"].items, 0.15);
+    table.insert(ProceduralDistributions.list["MedicalStorageOutfit"].items, "DentalPain.BookDentalCare3");
+    table.insert(ProceduralDistributions.list["MedicalStorageOutfit"].items, 0.08);
+end
+
+-- Distribution: MedicalStorageDrugs (pharmacy/drug storage)
+if ProceduralDistributions.list["MedicalStorageDrugs"] then
+    table.insert(ProceduralDistributions.list["MedicalStorageDrugs"].items, "DentalPain.BookDentalCare1");
+    table.insert(ProceduralDistributions.list["MedicalStorageDrugs"].items, 0.15);
+    table.insert(ProceduralDistributions.list["MedicalStorageDrugs"].items, "DentalPain.BookDentalCare2");
+    table.insert(ProceduralDistributions.list["MedicalStorageDrugs"].items, 0.1);
+end
+
+-- Distribution: LibraryBooks (libraries can have medical books)
+if ProceduralDistributions.list["LibraryBooks"] then
+    table.insert(ProceduralDistributions.list["LibraryBooks"].items, "DentalPain.BookDentalCare1");
+    table.insert(ProceduralDistributions.list["LibraryBooks"].items, 0.1);
+    table.insert(ProceduralDistributions.list["LibraryBooks"].items, "DentalPain.BookDentalCare2");
+    table.insert(ProceduralDistributions.list["LibraryBooks"].items, 0.05);
+    table.insert(ProceduralDistributions.list["LibraryBooks"].items, "DentalPain.BookDentalCare3");
+    table.insert(ProceduralDistributions.list["LibraryBooks"].items, 0.02);
 end
 

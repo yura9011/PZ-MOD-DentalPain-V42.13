@@ -11,7 +11,14 @@ function DP.Hygiene.brushTeeth(player, isHomemade)
     local gain = isHomemade and (DentalPain.Config.BrushHealthGain / 2) or DentalPain.Config.BrushHealthGain
     local unhappiness = isHomemade and 5 or 0
     
-    DentalPain.improveDentalHealth(player, gain)
+    -- Use ToothManager to heal individual teeth
+    local healedIndex = DentalPain.ToothManager.healRandomTooth(player, gain)
+    
+    -- Sync legacy dentalHealth with overall tooth health
+    local modData = player:getModData()
+    if modData then
+        modData.dentalHealth = DentalPain.ToothManager.getOverallHealth(player)
+    end
     
     if unhappiness > 0 then
         local stats = player:getStats()
@@ -20,21 +27,53 @@ function DP.Hygiene.brushTeeth(player, isHomemade)
         end
     end
     
-    DentalPain.debug("Brushed teeth. Gain: " .. gain .. " | Unhappiness: " .. unhappiness)
+    if healedIndex then
+        DentalPain.debug("Brushed teeth. Healed tooth " .. healedIndex .. " by " .. gain)
+    else
+        DentalPain.debug("Brushed teeth. All teeth already healthy.")
+    end
 end
 
 -- Flossing logic
 function DP.Hygiene.flossTeeth(player)
     if not player then return end
-    DentalPain.improveDentalHealth(player, DentalPain.Config.FlossHealthGain)
-    DentalPain.debug("Flossed teeth. Gain: " .. DentalPain.Config.FlossHealthGain)
+    
+    -- Use ToothManager to heal individual teeth
+    local gain = DentalPain.Config.FlossHealthGain
+    local healedIndex = DentalPain.ToothManager.healRandomTooth(player, gain)
+    
+    -- Sync legacy dentalHealth with overall tooth health
+    local modData = player:getModData()
+    if modData then
+        modData.dentalHealth = DentalPain.ToothManager.getOverallHealth(player)
+    end
+    
+    if healedIndex then
+        DentalPain.debug("Flossed teeth. Healed tooth " .. healedIndex .. " by " .. gain)
+    else
+        DentalPain.debug("Flossed teeth. All teeth already healthy.")
+    end
 end
 
 -- Mouthwash logic
 function DP.Hygiene.gargle(player)
     if not player then return end
-    DentalPain.improveDentalHealth(player, DentalPain.Config.MouthwashHealthGain)
-    DentalPain.debug("Gargled mouthwash. Gain: " .. DentalPain.Config.MouthwashHealthGain)
+    
+    -- Use ToothManager to heal individual teeth
+    local gain = DentalPain.Config.MouthwashHealthGain
+    local healedIndex = DentalPain.ToothManager.healRandomTooth(player, gain)
+    
+    -- Sync legacy dentalHealth with overall tooth health
+    local modData = player:getModData()
+    if modData then
+        modData.dentalHealth = DentalPain.ToothManager.getOverallHealth(player)
+    end
+    
+    if healedIndex then
+        DentalPain.debug("Gargled mouthwash. Healed tooth " .. healedIndex .. " by " .. gain)
+    else
+        DentalPain.debug("Gargled mouthwash. All teeth already healthy.")
+    end
 end
 
 -- Context Menu Hook: Hygiene
