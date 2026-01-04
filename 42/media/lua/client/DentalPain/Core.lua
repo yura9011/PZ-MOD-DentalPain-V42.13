@@ -122,7 +122,7 @@ DentalPain.Config = {
     FirstAidBonus = 10,           -- % per level of First Aid
     TeethTotal = 32,              -- Total teeth
     HealthPerTooth = 3,           -- Max health lost per extraction
-    DebugMode = true, -- ENABLED FOR DEBUGGING
+    DebugMode = false,
 }
 
 -- Food Impact Table (Damage per consumption)

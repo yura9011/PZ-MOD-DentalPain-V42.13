@@ -36,6 +36,12 @@ local function onCreatePlayer(playerNum, player)
         modData.lastEatingState = false
     end
     
+    -- Lifestyle mod compatibility: track last brush time
+    -- false = never brushed, number = hours survived when last brushed
+    if modData.lastBrushTeeth == nil then
+        modData.lastBrushTeeth = false
+    end
+    
     -- Sync legacy dentalHealth with ToothManager overall health
     modData.dentalHealth = DP.ToothManager.getOverallHealth(player)
     
@@ -264,6 +270,39 @@ local function onFillInventoryObjectContextMenu(playerNum, context, items)
             DP.ToothManager.initialize(player)
             modData.dentalCareXP = 0
             player:Say("Reset! 32 teeth, 100% HP, 0 XP")
+        end)
+        
+        -- === LIFESTYLE COMPATIBILITY TESTS ===
+        subMenu:addOption("--- Lifestyle Compat ---", nil, nil)
+        
+        -- 10. Show lastBrushTeeth status
+        subMenu:addOption("10. Check lastBrushTeeth", player, function()
+            local lastBrush = modData.lastBrushTeeth
+            local hoursSince = DP.Hygiene.getHoursSinceLastBrush(player)
+            local currentHours = getGameTime():getWorldAgeHours()
+            
+            if lastBrush == false then
+                player:Say("lastBrushTeeth = FALSE (never brushed)")
+            else
+                player:Say("lastBrushTeeth = " .. string.format("%.1f", lastBrush) .. " | Hours since: " .. string.format("%.1f", hoursSince or 0))
+            end
+            print("[DentalPain] lastBrushTeeth = " .. tostring(lastBrush) .. " | Current hours: " .. string.format("%.1f", currentHours))
+        end)
+        
+        -- 11. Reset lastBrushTeeth to false (simulate never brushed)
+        subMenu:addOption("11. Reset lastBrushTeeth = false", player, function()
+            modData.lastBrushTeeth = false
+            player:Say("lastBrushTeeth reset to FALSE")
+            print("[DentalPain] lastBrushTeeth reset to false")
+        end)
+        
+        -- 12. Simulate brush (updates lastBrushTeeth)
+        subMenu:addOption("12. Brush + Check timestamp", player, function()
+            local beforeBrush = modData.lastBrushTeeth
+            DP.Hygiene.brushTeeth(player, false)
+            local afterBrush = modData.lastBrushTeeth
+            player:Say("Before: " .. tostring(beforeBrush) .. " | After: " .. string.format("%.1f", afterBrush))
+            print("[DentalPain] Brush test - Before: " .. tostring(beforeBrush) .. " | After: " .. tostring(afterBrush))
         end)
     end
 

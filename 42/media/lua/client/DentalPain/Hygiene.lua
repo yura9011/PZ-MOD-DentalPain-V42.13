@@ -18,6 +18,9 @@ function DP.Hygiene.brushTeeth(player, isHomemade)
     local modData = player:getModData()
     if modData then
         modData.dentalHealth = DentalPain.ToothManager.getOverallHealth(player)
+        
+        -- Lifestyle mod compatibility: save current hours survived
+        modData.lastBrushTeeth = getGameTime():getWorldAgeHours()
     end
     
     if unhappiness > 0 then
@@ -74,6 +77,21 @@ function DP.Hygiene.gargle(player)
     else
         DentalPain.debug("Gargled mouthwash. All teeth already healthy.")
     end
+end
+
+-- Lifestyle mod compatibility: get hours since last brush
+-- Returns nil if never brushed, otherwise returns hours elapsed
+function DP.Hygiene.getHoursSinceLastBrush(player)
+    if not player then return nil end
+    local modData = player:getModData()
+    if not modData then return nil end
+    
+    local lastBrush = modData.lastBrushTeeth
+    if not lastBrush or lastBrush == false then
+        return nil  -- Never brushed
+    end
+    
+    return getGameTime():getWorldAgeHours() - lastBrush
 end
 
 -- Context Menu Hook: Hygiene
